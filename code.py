@@ -22,7 +22,12 @@ def check_diagonal_advantage(matrix):
 
 
 def highlight_root(A, b):
-    """Takes two matrices(A, B from Ax = b) and returns two matrices(B, C from x = Bx + c)"""
+    """
+    Takes:
+        matrix of coefficients and free terms(A, b from Ax = b)
+    Returns:
+        matrix of coefficients and free terms(B, c from x = Bx + c)
+    """
     B = []
     c = []
     for i in range(len(A)):
@@ -164,8 +169,8 @@ print(residual_vector(A, b, x))
 
 # Search for root with random initial approximation
 print("\nCalculating root with random initial approximation:")
-print("x =", x)
 x = tuple(round(random.uniform(t - 1, t + 1), 6) for t in x)
+print("x =", x)
 x, log = find_root(criterion, B, c, x, 0.00001)
 print_log(log)
 print("Result:", x)
