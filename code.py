@@ -1,3 +1,6 @@
+import numpy as np
+import random
+
 A = ((4.855, 1.239, 0.272, 0.258),
      (1.491, 4.954, 0.124, 0.236),
      (0.456, 0.285, 4.354, 0.254),
@@ -71,6 +74,12 @@ def find_root(criterion, B, c, x0, eps):
     return x1, log
 
 
+def residual_vector(A, b, x):
+    """Takes system of linear algebraic equations and its root, return residual vector(b - Ax)"""
+    res = tuple(abs(round(b[i] - sum([A[i][j] * x[j] for j in range(len(x))]), 7)) for i in range(len(b)))
+    return res
+
+
 def print_matrix(matrix):
     """Takes matrix and print it to the stdout"""
     for line in matrix:
@@ -94,7 +103,8 @@ def print_trans_equation(B, c):
 
 
 def print_log(log):
-    print("-"*89)
+    """Takes log and print it"""
+    print("-" * 89)
     print('|' + "№ iteration".center(15) + '|' +
           "|".join([f"x{i + 1}".center(12) for i in range(len(log[0]))]) + "|" +
           "||x^k - x^k-1||".center(19) + "|")
@@ -102,7 +112,7 @@ def print_log(log):
     for i in range(len(log)):
         print('|' + f"{i}".center(15) + '|' +
               "|".join([str(x).center(12) for x in log[i]]) + "|" +
-              str(round(max(map(lambda x, y: abs(x - y), log[i], log[i-1])), 6) if i > 0 else 0).center(19) + "|")
+              str(round(max(map(lambda x, y: abs(x - y), log[i], log[i - 1])), 6) if i > 0 else 0).center(19) + "|")
         print("-" * 89)
 
 
@@ -142,9 +152,28 @@ if q <= 0.5:
 else:
     print("Criterion: (q/1−q) * ||x^k - x^k-1||≤ ε")
 
-# Searching for root
+# Search for root
 print("\nCalculating root:")
 x, log = find_root(criterion, B, c, x, 0.00001)
 print_log(log)
 print("Result:", x)
 
+# Calculate residual vector
+print("\nResidual vector:")
+print(residual_vector(A, b, x))
+
+# Search for root with random initial approximation
+print("\nCalculating root with random initial approximation:")
+print("x =", x)
+x = tuple(round(random.uniform(t - 1, t + 1), 6) for t in x)
+x, log = find_root(criterion, B, c, x, 0.00001)
+print_log(log)
+print("Result:", x)
+
+# Calculate residual vector for this case
+print("\nResidual vector for this case:")
+print(residual_vector(A, b, x))
+
+# Calculate root using numpy
+print("\nCalculating root using numpy:")
+print(np.linalg.solve(A, b))
