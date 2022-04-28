@@ -39,8 +39,36 @@ def matrix_norm(matrix):
 def choose_criterion(q):
     """Takes q and returns a stopping criterion"""
     if q <= 0.5:
-        return lambda x1, x0, eps: max(map(lambda x, y: x - y, x1, x0), key=abs) < eps
+        return lambda x1, x0, eps: max(map(lambda x, y: abs(x - y), x1, x0)) < eps
     return lambda x1, x0, eps: q / (1 - q) * max(map(lambda x, y: abs(x - y), x1, x0)) < eps
+
+
+def next_term(B, c, x0):
+    """Takes matrix of coefficients and free terms of equation x = Bx + c and previous term, returns next term"""
+    x1 = tuple(round(sum([B[i][j] * x0[j if j < i else j + 1] for j in range(len(B[i]))]) + c[i][0], 6) for i in
+               range(len(x0)))
+    return x1
+
+
+def find_root(criterion, B, c, x0, eps):
+    """Finds root of system of linear algebraic equations
+    Takes:
+        criterion - criterion of stopping
+        B, c - matrix of coefficients and free terms of equation x = Bx + c
+        x0 - initial approximation
+        eps - precision
+    Return:
+        x1 - root of system of linear algebraic equations
+        log - history of approximations
+    """
+    log = [x0]
+    x1 = next_term(B, c, x0)
+    log.append(x1)
+    while not criterion(x1, x0, eps):
+        x0 = x1
+        x1 = next_term(B, c, x0)
+        log.append(x1)
+    return x1, log
 
 
 def print_matrix(matrix):
@@ -89,14 +117,18 @@ print('Result:', q, '\n')
 
 # Put c as an initial approximation
 print('Put c as an initial approximation')
-x = [n[0] for n in c]
-print(f'x0 = {tuple(x)}\n')
+x = tuple(n[0] for n in c)
+print(f'x0 = {x}\n')
 
 # Choose stopping criterion
 print("Choosing stopping criterion:")
-criteria = choose_criterion(q)
+criterion = choose_criterion(q)
 print(f"q = {q}")
 if q <= 0.5:
     print("Criterion:||x^k - x^k-1||≤ ε")
 else:
     print("Criterion: (q/1−q) * ||x^k - x^k-1||≤ ε")
+
+
+x, log = find_root(criterion, B, c, x, 0.00001)
+print(*log, sep='\n')
