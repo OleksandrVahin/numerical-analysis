@@ -93,6 +93,19 @@ def print_trans_equation(B, c):
         print(f'x{i + 1} = ' + ' + '.join(s) + ' + ' + str(*c[i]))
 
 
+def print_log(log):
+    print("-"*89)
+    print('|' + "№ iteration".center(15) + '|' +
+          "|".join([f"x{i + 1}".center(12) for i in range(len(log[0]))]) + "|" +
+          "||x^k - x^k-1||".center(19) + "|")
+    print("-" * 89)
+    for i in range(len(log)):
+        print('|' + f"{i}".center(15) + '|' +
+              "|".join([str(x).center(12) for x in log[i]]) + "|" +
+              str(round(max(map(lambda x, y: abs(x - y), log[i], log[i-1])), 6) if i > 0 else 0).center(19) + "|")
+        print("-" * 89)
+
+
 # Lab steps
 
 # Print input data
@@ -129,6 +142,9 @@ if q <= 0.5:
 else:
     print("Criterion: (q/1−q) * ||x^k - x^k-1||≤ ε")
 
-
+# Searching for root
+print("\nCalculating root:")
 x, log = find_root(criterion, B, c, x, 0.00001)
-print(*log, sep='\n')
+print_log(log)
+print("Result:", x)
+
