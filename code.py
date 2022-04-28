@@ -30,6 +30,9 @@ def highlight_root(A, b):
 
 def matrix_norm(matrix):
     """Takes matrix, return matrix norm(maximum of sum's of absolutes of each line)"""
+    print(r"max{", end='')
+    print(*[round(sum(map(abs, line)), 6) for line in matrix], sep=', ', end='')
+    print(r'}')
     return max([sum(map(abs, line)) for line in matrix])
 
 
@@ -44,10 +47,15 @@ def print_matrix(matrix):
 def print_matrix_equation(A, b):
     """Takes matrix of coefficients and free terms of equation Ax = b and print this equation"""
     for i in range(len(A)):
-        s = []
-        for j in range(len(A[i])):
-            s.append(str(A[i][j]) + f'∙x{j + 1}')
+        s = [str(A[i][j]) + f'∙x{j + 1}' for j in range(len(A[i]))]
         print(' + '.join(s) + ' = ' + str(b[i]))
+
+
+def print_trans_equation(B, c):
+    """Takes matrix of coefficients and free terms of equation x = Bx + c and print this equation"""
+    for i in range(len(B)):
+        s = [str(B[i][j]) + f'∙x{j + 1 if j < i else j + 2}' for j in range(len(B[i]))]
+        print(f'x{i + 1} = ' + ' + '.join(s) + ' + ' + str(*c[i]))
 
 
 # Lab steps
@@ -62,7 +70,17 @@ print('Checking diagonal advantage:')
 print('Result:', check_diagonal_advantage(A), '\n')
 
 # Transform equation from Ax = b to x = Bx + c
+print("Transforming equation from Ax = b to x = Bx + c:")
 B, c = highlight_root(A, b)
-print_matrix(B)
-print_matrix(c)
-print(matrix_norm(B))
+print_trans_equation(B, c)
+print()
+
+# Find matrix norm
+print("Calculating matrix norm:")
+q = matrix_norm(B)
+print('Result:', q, '\n')
+
+# Put c as an initial approximation
+print('Put c as an initial approximation')
+x = [n[0] for n in c]
+print(f'x0 = {tuple(x)}')
