@@ -36,6 +36,13 @@ def matrix_norm(matrix):
     return max([sum(map(abs, line)) for line in matrix])
 
 
+def choose_criterion(q):
+    """Takes q and returns a stopping criterion"""
+    if q <= 0.5:
+        return lambda x1, x0, eps: max(map(lambda x, y: x - y, x1, x0), key=abs) < eps
+    return lambda x1, x0, eps: q / (1 - q) * max(map(lambda x, y: abs(x - y), x1, x0)) < eps
+
+
 def print_matrix(matrix):
     """Takes matrix and print it to the stdout"""
     for line in matrix:
@@ -83,4 +90,13 @@ print('Result:', q, '\n')
 # Put c as an initial approximation
 print('Put c as an initial approximation')
 x = [n[0] for n in c]
-print(f'x0 = {tuple(x)}')
+print(f'x0 = {tuple(x)}\n')
+
+# Choose stopping criterion
+print("Choosing stopping criterion:")
+criteria = choose_criterion(q)
+print(f"q = {q}")
+if q <= 0.5:
+    print("Criterion:||x^k - x^k-1||≤ ε")
+else:
+    print("Criterion: (q/1−q) * ||x^k - x^k-1||≤ ε")
