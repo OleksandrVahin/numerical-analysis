@@ -22,5 +22,15 @@ def print_intersection(f1, f2):
     plt.show()
 
 
+def norm_max(vector):
+    """Takes vector, returns its Chebyshev's norm"""
+    return max(map(abs, vector))
+
+
+def vector_difference(a, b):
+    """Takes two vectors, returns their difference"""
+    return tuple(t - s for t, s in zip(a, b))
+
+
 # Looking graphically for first initial approximation
 print_intersection(x1, y1)
