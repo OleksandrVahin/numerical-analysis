@@ -138,4 +138,16 @@ for j in range(len(initial_approximations)):
     print("Solution of system is:", tuple(map(r5, solution)))
     print(second_system(solution))
 
+# Calculating solution with random initial approximation
+print("\nRandom initial approximation")
+for j in range(5):
+    approx = random.uniform(-50, 50), random.uniform(-50, 50)
+    solution, history = newton_search(approx, 0.00001, jacobian, second_system)
+    print(f"Attempt №{j + 1}: initial approx - {approx} root is {solution}, iterations - {len(history)}")
+
+# Calculating solution via SciPy
+print("\nVia SciPy")
+for j in range(len(initial_approximations)):
+    print(f"Root №{j + 1}")
+    print(fsolve(second_system, initial_approximations[j]))
 
