@@ -76,6 +76,11 @@ def simple_iterations(x_0, eps, equations):
         x_0 = x_1
 
 
+def second_system(vector):
+    """Returns equations of system from second task as tuple"""
+    return np.tan(vector[0] * vector[1] + 0.3) - vector[0] ** 2, 0.7 * (vector[0] ** 2) + 2 * (vector[1] ** 2) - 1
+
+
 # First task
 
 # Looking graphically for first initial approximation
@@ -88,11 +93,11 @@ print("Solution of system is:", tuple(map(r5, solution)))
 
 # Calculating solution with random initial approximation
 print("\nRandom initial approximation")
-for i in range(5):
+for j in range(5):
     approx = random.uniform(-50, 50), random.uniform(-50, 50)
     solution, history = simple_iterations(approx, 0.00001, (x1, y1))
-    print(f"Attempt №{i + 1}: initial approx - {approx} root is {solution}, iterations - {len(history)}")
+    print(f"Attempt №{j + 1}: initial approx - {approx} root is {solution}, iterations - {len(history)}")
 
 # Calculating solution via SciPy
 print("\nVia SciPy")
-print("Root is", fsolve((lambda x: (np.cos(x[1] - 2)+x[0], np.sin(x[0] + 0.5) - x[1] - 1)), (0.5, -0.1)))
+print("Root is", fsolve((lambda x: (np.cos(x[1] - 2) + x[0], np.sin(x[0] + 0.5) - x[1] - 1)), np.array(0.5, -0.1)))
