@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from functools import partial
+import random
+from scipy.optimize import fsolve
 
 
 # First task initial data
@@ -24,6 +26,22 @@ def print_intersection(f1, f2):
 
 
 r5 = partial(round, ndigits=5)
+
+
+def print_log(log):
+    """Takes log and print it"""
+    print("-" * 55)
+    print('|' + "№ iteration".center(15) + '|'
+          + 'x'.center(11) + '|'
+          + 'y'.center(12) + '|'
+          + 'Δ'.center(12) + '|')
+    print("-" * 55)
+    for i in range(len(log)):
+        print('|' + str(i).center(15) + '|'
+              + '{:.5f}'.format(log[i][0][0]).center(11) + '|'
+              + '{:.5f}'.format(log[i][0][1]).center(12) + '|'
+              + '{:.6f}'.format(log[i][1]).center(12) + '|')
+        print("-" * 55)
 
 
 def norm_max(vector):
@@ -65,4 +83,16 @@ print_intersection(x1, y1)
 
 # Calculating solution
 solution, history = simple_iterations((0.5, -0.1), 0.00001, (x1, y1))
+print_log(history)
 print("Solution of system is:", tuple(map(r5, solution)))
+
+# Calculating solution with random initial approximation
+print("\nRandom initial approximation")
+for i in range(5):
+    approx = random.uniform(-50, 50), random.uniform(-50, 50)
+    solution, history = simple_iterations(approx, 0.00001, (x1, y1))
+    print(f"Attempt №{i + 1}: initial approx - {approx} root is {solution}, iterations - {len(history)}")
+
+# Calculating solution via SciPy
+print("\nVia SciPy")
+print("Root is", fsolve((lambda x: (np.cos(x[1] - 2)+x[0], np.sin(x[0] + 0.5) - x[1] - 1)), (0.5, -0.1)))
