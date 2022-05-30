@@ -44,6 +44,18 @@ def first_newton_polynom(x, nodes, diffs):
     return result
 
 
+def second_newton_polynom(x, nodes, diffs):
+    """Returns value of second newton interpolation polynom"""
+    h = nodes[1] - nodes[0]
+    q = (x - nodes[-1]) / h
+    result = func1(nodes[-1])
+    k = 1
+    for i in range(len(diffs) - 1):
+        k *= (q + i) / (i + 1)
+        result += k * diffs[i][-1]
+    return result
+
+
 # First Task
 
 # Calculating values in nodes
@@ -57,3 +69,5 @@ for node in values:
 differences = finite_differences(values)
 print("\n\nFinite differences:")
 print(*differences, sep='\n')
+for node in nodes:
+    print('{:.5f}'.format(second_newton_polynom(node, nodes, differences)), end=' ')
