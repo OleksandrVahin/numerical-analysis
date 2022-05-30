@@ -1,4 +1,6 @@
+import math
 import numpy as np
+from functools import reduce
 
 
 def chebyshev_nodes(a, b, n):
@@ -21,12 +23,25 @@ def finite_differences(func_values):
     while n > 1:
         diffs.append(tuple(diffs[-1][i + 1] - diffs[-1][i] for i in range(n - 1)))
         n -= 1
+    del diffs[0]
     return diffs
 
 
 def lagrange(x):
     """Returns value of lagrange interpolation polynom for first task"""
     return -0.61743 * x ** 2 + 1.23486 * x + 1.0806
+
+
+def first_newton_polynom(x, nodes, diffs):
+    """Returns value of first newton interpolation polynom"""
+    h = nodes[1] - nodes[0]
+    q = (x - nodes[0]) / h
+    result = func1(nodes[0])
+    k = 1
+    for i in range(len(diffs) - 1):
+        k *= (q - i) / (i + 1)
+        result += k * diffs[i][0]
+    return result
 
 
 # First Task
