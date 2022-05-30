@@ -24,6 +24,11 @@ def finite_differences(func_values):
     return diffs
 
 
+def lagrange(x):
+    """Returns value of lagrange interpolation polynom for first task"""
+    return -0.61743 * x ** 2 + 1.23486 * x + 1.0806
+
+
 # First Task
 
 # Calculating values in nodes
