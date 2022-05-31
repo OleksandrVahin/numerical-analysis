@@ -1,6 +1,5 @@
-import math
 import numpy as np
-from functools import reduce
+import matplotlib.pyplot as plt
 
 
 def chebyshev_nodes(a, b, n):
@@ -56,6 +55,23 @@ def second_newton_polynom(x, nodes, diffs):
     return result
 
 
+def comparison_table(points):
+    print("-" * 71)
+    print('|' + "x".center(9) + '|'
+          + 'ƒ(x)'.center(12) + '|'
+          + 'Lagrange'.center(12) + '|'
+          + 'First Newton'.center(16) + '|'
+          + 'Second Newton'.center(16) + '|')
+    print("-" * 71)
+    for x in points:
+        print('|' + str(x).center(9) + '|'
+              + '{:.5f}'.format(func1(x)).center(12) + '|'
+              + '{:.5f}'.format(lagrange(x)).center(12) + '|'
+              + '{:.5f}'.format(first_newton_polynom(x, nodes, differences)).center(16) + '|'
+              + '{:.5f}'.format(second_newton_polynom(x, nodes, differences)).center(16) + '|')
+        print("-" * 71)
+
+
 # First Task
 
 # Calculating values in nodes
@@ -69,5 +85,16 @@ for node in values:
 differences = finite_differences(values)
 print("\n\nFinite differences:")
 print(*differences, sep='\n')
-for node in nodes:
-    print('{:.5f}'.format(second_newton_polynom(node, nodes, differences)), end=' ')
+
+# Comparing values
+xs = (-1.5, -1, 0.1, 3.9)
+comparison_table(xs)
+
+# Drawing newtons
+plt.subplots()
+ls = np.linspace(-4, 6, 1000)
+plt.plot(ls, func1(ls), label='ƒ(x)')
+plt.plot(ls, first_newton_polynom(ls, nodes, differences), label='First Newton')
+plt.plot(ls, second_newton_polynom(ls, nodes, differences), label='Second Newton')
+plt.legend(loc='best')
+plt.show()
