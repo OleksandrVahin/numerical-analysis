@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from functools import reduce
 
 
 def chebyshev_nodes(a, b, n):
@@ -78,7 +77,7 @@ def smallest_squares(x, y):
     """Returns value of coefficient of method the smallest squares for linear function"""
     a00 = sum(2 * t ** 2 for t in x)
     a01 = sum(2 * t for t in x)
-    a10 = a01 = sum(2 * t for t in x)
+    a10 = sum(2 * t for t in x)
     a11 = 20
     a = ((a00, a01), (a10, a11))
     b0 = sum(2 * t * s for t, s in zip(x, y))
