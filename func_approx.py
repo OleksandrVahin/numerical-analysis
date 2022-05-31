@@ -86,6 +86,7 @@ def smallest_squares(x, y):
     b = (b0, b1)
     return np.linalg.solve(a, b)
 
+
 # First Task
 
 # Calculating values in nodes
