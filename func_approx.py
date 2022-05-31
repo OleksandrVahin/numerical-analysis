@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from functools import reduce
 
 
 def chebyshev_nodes(a, b, n):
@@ -56,6 +57,7 @@ def second_newton_polynom(x, nodes, diffs):
 
 
 def comparison_table(points):
+    """Prints value of approximation functions"""
     print("-" * 71)
     print('|' + "x".center(9) + '|'
           + 'ƒ(x)'.center(12) + '|'
@@ -71,6 +73,17 @@ def comparison_table(points):
               + '{:.5f}'.format(second_newton_polynom(x, nodes, differences)).center(16) + '|')
         print("-" * 71)
 
+
+def smallest_squares(x, y):
+    a00 = sum(2 * t ** 2 for t in x)
+    a01 = sum(2 * t for t in x)
+    a10 = a01 = sum(2 * t for t in x)
+    a11 = 20
+    a = ((a00, a01), (a10, a11))
+    b0 = sum(2 * t * s for t, s in zip(x, y))
+    b1 = sum(2 * s for s in y)
+    b = (b0, b1)
+    return np.linalg.solve(a, b)
 
 # First Task
 
@@ -98,3 +111,19 @@ plt.plot(ls, first_newton_polynom(ls, nodes, differences), label='First Newton')
 plt.plot(ls, second_newton_polynom(ls, nodes, differences), label='Second Newton')
 plt.legend(loc='best')
 plt.show()
+
+# Second Task
+
+# Visualisation of initial data
+x = np.linspace(2, 5, 10)
+y = (2.57, 2.15, 1.28, 1.16, 0.58, 0.61, 0.33, 0.19, 0.23, 0.21)
+plt.scatter(x, y)
+plt.show()
+
+# Parsing y-values to linearize sample
+y1 = tuple(map(np.log, y))
+plt.scatter(x, y1)
+plt.show()
+
+root = smallest_squares(x, y1)
+print(root)
